@@ -1,0 +1,58 @@
+'''Encrypt and hide a zipfile in an image or unpack an image with a hidden archive in it'''
+
+import sys
+import argparse
+import StringIO
+from getpass import getpass
+from zipfile import ZipFile
+from bcrypt import gensalt, hashpw
+from nacl.secret import SecretBox
+import nacl.utils
+
+
+def key_32(salt):
+    '''Returns 32 byte key'''
+    return hashpw(getpass(), salt)[-32:]
+
+
+def hide(image_file, archive_file):
+    '''Append an encrypted archive onto the end of an image'''
+
+    salt = gensalt()
+    box = SecretBox(key_32(salt))
+    nonce = "dg1" + nacl.utils.random(21)
+
+    # open the image file in "append binary" mode
+    with open(image_file, "ab") as image:
+        # open the archive file in "read only binary" mode
+        with open(archive_file, "rb") as a:
+            archive = a.read()
+            # Append the encrypted contents of the archive onto the image, along with the salt
+            image.write("EOF" + box.encrypt(archive, nonce) + "EOF" + salt)
+
+
+def unhide(unhide_file):
+    '''Unpack a zipfile'''
+
+    with open(unhide_file, "rb") as f:
+        hidden_file = f.read()
+        image, encrypted, salt = hidden_file.split("EOF")
+        box = SecretBox(key_32(salt))
+        # zipfile needs a file-like object
+        e_string = StringIO.StringIO()
+        # decrypt the file
+        e_string.write(box.decrypt(encrypted))
+        archive = ZipFile(e_string)
+        archive.extractall()
+        sys.stdout.write("File sucessfully extracted\n")
+
+
+if __name__ == '__main__':
+    parser = argparse.ArgumentParser()
+    parser.add_argument('-H', '--hide', nargs=2)
+    parser.add_argument('-U', '--unhide')
+    args = parser.parse_args()
+    if args.hide:
+        hide(*args.hide)
+    if args.unhide:
+        unhide(args.unhide)
