@@ -2,15 +2,10 @@ import unittest
 import warnings
 import tempfile
 import os
+import hide.hide as hide
 
+# Usage:
 # python -m unittest tests.test_hide
-
-with warnings.catch_warnings():
-    warnings.simplefilter("ignore")
-    import hide.hide as hide
-
-# def test_random_bytes_produces():
-#     assert len(nacl.utils.random(16)) == 16
 
 
 def fake_getpass(*args):
