@@ -3,19 +3,11 @@
 import sys
 import argparse
 import StringIO
-import warnings
 from getpass import getpass
 from zipfile import ZipFile
 from bcrypt import gensalt, hashpw
-
-with warnings.catch_warnings():
-    '''Suppress this warning (for now?):
-    /usr/local/lib/python2.7/site-packages/cffi/vengine_cpy.py:166: UserWarning: reimporting '_cffi__x332a1fa9xefb54d7c' might overwrite older definitions
-  % (self.verifier.get_module_name()))
-    '''
-    warnings.simplefilter("ignore")
-    import nacl.utils
-    from nacl.secret import SecretBox
+from nacl.secret import SecretBox
+import nacl.utils
 
 
 def key_32(salt):

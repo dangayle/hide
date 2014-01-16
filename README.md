@@ -20,8 +20,7 @@ python hide.py -U batman.gif
 ```
 
 ###Caveats
-
-The actual [steganography](http://en.wikipedia.org/wiki/Steganography) part of this is painfully trivial, not like the "least significant bit" kind of hiding stuff, so your mileage may vary.
+The actual [steganography](http://en.wikipedia.org/wiki/Steganography) part of this script is painfully trivial, not like the "least significant bit" kind of hiding stuff, so your mileage may vary.
 
 Everyone tells us to absolutely **DO  NOT** try to invent our own cryptography schemes, so I've tried to follow the best practices for the encryption part of this, following the suggestions from the fine folks on Twitter and the ```#python``` IRC, but I'm not a security expert. I'm going to get people smarter than me to look at it.
 
