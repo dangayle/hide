@@ -30,3 +30,8 @@ Requires [bcrypt](https://github.com/pyca/bcrypt/) and [PyNaCl](https://github.c
 
 ###License
 Uses the [MIT license](https://github.com/dangayle/hide/blob/master/LICENSE)
+
+###TODO
+* Find a better way to write the data to the image. I think doing bytecounts and using those as a flag at the end of the file would be a more robust way to do it, but I'm not 100% certain. Something like `image.write(encrypted_file + salt + len(encrypted_file) + len(salt))`, but then I don't know how many bytes to count when decrypting it.
+* Maybe add the zip compression directly into the script?
+* Write some tests, which I'm still inexperienced at
