@@ -1,5 +1,6 @@
 '''Encrypt and hide a zipfile in an image or unpack an image with a hidden archive in it'''
 
+import os
 import sys
 import argparse
 import StringIO
@@ -44,16 +45,25 @@ def unhide(unhide_file):
 
     with open(unhide_file, "rb") as f:
         hidden_file = f.read()
+        # split file into component parts
         image, encrypted, salt = hidden_file.split("EOF")
         box = SecretBox(key_32(salt))
+        try:
+            decrypted = box.decrypt(encrypted)
+        except:
+            raise
         # zipfile needs a file-like object
         e_string = StringIO.StringIO()
-        # decrypt the file
-        e_string.write(box.decrypt(encrypted))
+        e_string.write(decrypted)
         archive = ZipFile(e_string)
-        archive.extractall()
-        sys.stdout.write("File sucessfully extracted\n")
-
+        try:
+            # sys.stdout.write("\n\nExtracting files:\n")
+            # print os.path.dirname(unhide_file)
+            # archive.printdir()
+            archive.extractall(os.path.dirname(unhide_file))
+            # sys.stdout.write("Files sucessfully extracted\n\n")
+        except:
+            raise
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
