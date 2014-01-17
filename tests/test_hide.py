@@ -30,6 +30,7 @@ def cleanup_gensalt(module, old_gensalt):
 
 
 class test_hide(unittest.TestCase):
+    '''Test the ability to encrypt and decrypt a zipfile hidden in an image'''
 
     def setUp(self):
         '''Create tempfiles to work with, and mock the pass and salt'''
@@ -56,6 +57,7 @@ class test_hide(unittest.TestCase):
 
     def tearDown(self):
         '''Restore original modules and clean up temp files'''
+
         cleanup_getpass(hide, self.old_getpass)
         cleanup_gensalt(hide, self.old_gensalt)
         os.unlink(self.temp_file.name)
@@ -63,18 +65,21 @@ class test_hide(unittest.TestCase):
         shutil.rmtree(tempfile.gettempdir())
 
     def test_key_32(self):
+        '''Test secure key gen function'''
+
         key = hide.key_32(self.salt)
         self.assertEqual(len(key), 32)
         self.assertEqual(key, "OTePKw6L1d6IpIPfe/iJiaRYeHMUP6wO")
 
     def test_hide(self):
         '''Encrypt temp zipfile'''
-        # pass
+
         hide.hide(self.temp_file.name, self.temp_zip.name)
         self.assertEqual(os.path.getsize(self.temp_file.name), 208)
 
     def test_unhide(self):
         '''Encrypt then unencrypt an archive file'''
+
         hide.hide(self.temp_file.name, self.temp_zip.name)
         hide.unhide(self.temp_file.name)
         with self.assertRaises(ValueError):
