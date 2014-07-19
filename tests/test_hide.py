@@ -30,10 +30,10 @@ def cleanup_gensalt(module, old_gensalt):
 
 
 class test_hide(unittest.TestCase):
-    '''Test the ability to encrypt and decrypt a zipfile hidden in an image'''
+    """Test encrypting and decrypting a zipfile hidden in an image"""
 
     def setUp(self):
-        '''Create tempfiles to work with, and mock the pass and salt'''
+        """Create tempfiles to work with, and mock the pass and salt."""
 
         self.old_getpass = hide.getpass
         hide.getpass = mock_getpass
@@ -56,7 +56,7 @@ class test_hide(unittest.TestCase):
             temp_zip.close()
 
     def tearDown(self):
-        '''Restore original modules and clean up temp files'''
+        """Restore original modules and clean up temp files."""
 
         cleanup_getpass(hide, self.old_getpass)
         cleanup_gensalt(hide, self.old_gensalt)
@@ -65,23 +65,29 @@ class test_hide(unittest.TestCase):
         shutil.rmtree(tempfile.gettempdir())
 
     def test_key_32(self):
-        '''Test secure key gen function'''
+        """Test secure key gen function"""
 
         key = hide.key_32(self.salt)
         self.assertEqual(len(key), 32)
         self.assertEqual(key, "OTePKw6L1d6IpIPfe/iJiaRYeHMUP6wO")
 
     def test_hide(self):
-        '''Encrypt temp zipfile'''
+        """Encrypt temp zipfile."""
 
         hide.hide(self.temp_file.name, self.temp_zip.name)
         self.assertEqual(os.path.getsize(self.temp_file.name), 208)
 
     def test_unhide(self):
-        '''Encrypt then unencrypt an archive file'''
+        """Encrypt then unencrypt an archive file.
+
+        TODO: Add test for non-decompress option
+        TODO: Add test for bad zip file
+        """
 
         hide.hide(self.temp_file.name, self.temp_zip.name)
-        hide.unhide(self.temp_file.name)
-        with self.assertRaises(ValueError):
+        hide.unhide(self.temp_file.name, decompress=True)
+        with self.assertRaises(SystemExit):
             hide.unhide(self.temp_zip.name)
         self.assertTrue(os.path.isfile(os.path.join(tempfile.gettempdir(), "bogart.txt")))
+        # hide.unhide(self.temp_file.name, decompress=False)
+        # self.assertTrue(os.path.isfile(os.path.join(tempfile.gettempdir(), "bogart.txt")))
