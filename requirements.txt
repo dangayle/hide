@@ -1,0 +1,6 @@
+PyNaCl==0.2.3
+bcrypt==1.0.2
+cffi==0.8.6
+pycparser==2.10
+six==1.7.3
+wsgiref==0.1.2
