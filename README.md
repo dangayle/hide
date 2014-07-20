@@ -4,28 +4,30 @@ Hide
 A steganography python script for encrypting/hiding a zipfile within a image file. Uses [bcrypt](https://github.com/pyca/bcrypt/) for the password key deriviation function and [PyNaCl](https://github.com/pyca/pynacl) for the secret-key cryptography.
 
 ###How to hide a file
-To hide and encrypt a zipfile, use the `-H` argument and feed it the name of the image and the name of the archive:
+To hide and encrypt a zipfile:
 
-```python
-python hide.py -H batman.gif zip_archive.zip
+```
+python hide.py -i batman.gif -a zip_archive.zip
 ```
 
-You'll be asked for a password and then you're done. If it blows up, well, it didn't work.
+You'll be asked for a password and then you're done. If it blows up, it didn't work.
 
 ###How to unhide a file
-To unhide and decrypt a zipfile, use the `-U` argument and feed it the name of the image containing the encrypted archive
+To unhide and decrypt a zipfile:
 
-```python
-python hide.py -U batman.gif
 ```
+python hide.py -u batman.gif -d
+```
+Optional `-d` flag uncompresses the archive to same dir as the image file.
 
 ###Caveats
-The actual [steganography](http://en.wikipedia.org/wiki/Steganography) part of this script is painfully trivial, not like the "least significant bit" kind of hiding stuff, so your mileage may vary.
+I didn't attempt to invent my own cryptography, so Hide is built using the excellent and cryptographically sound [bcrypt](https://github.com/pyca/bcrypt/) and [PyNaCl](https://github.com/pyca/pynacl) libraries. Don't roll your own crypto.
 
-Everyone tells us to absolutely **DO  NOT** try to invent our own cryptography schemes, so I've tried to follow the best practices for the encryption part of this, following the suggestions from the fine folks on Twitter and the ```#python``` IRC, but I'm not a security expert. I'm going to get people smarter than me to look at it.
+The actual [steganography](http://en.wikipedia.org/wiki/Steganography) part of this script is painfully awkward, not like the "least significant bit" kinds of steganography. Although the crypto is secure, the hidden archive file is easily detectable by someone with decent CS knowledge, meaning although they can't open the file, they might know it exists.
+
 
 ###Tests
-I think I about covered it with the tests. They all pass, so whoop!
+Tests pass `python -m unittest tests.test_hide`
 
 ###Requirements
 Requires [bcrypt](https://github.com/pyca/bcrypt/) and [PyNaCl](https://github.com/pyca/pynacl), which you can `pip` install.
