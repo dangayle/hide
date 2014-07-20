@@ -1,6 +1,6 @@
 """
-Encrypt and hide a zipfile in an image
-or unpack an image with a hidden archive in it.
+Encrypt and hide a zipfile in an image or unpack an image with a hidden
+archive in it.
 """
 
 import os
@@ -15,8 +15,8 @@ from bcrypt import gensalt, hashpw
 with warnings.catch_warnings():
     """Suppress this warning (for now?):
     /usr/local/lib/python2.7/site-packages/cffi/vengine_cpy.py:166:
-        UserWarning: reimporting '_cffi__x332a1fa9xefb54d7c' might overwrite older definitions
-  % (self.verifier.get_module_name()))
+        UserWarning: reimporting '_cffi__x332a1fa9xefb54d7c'
+        might overwrite older definitions % (self.verifier.get_module_name()))
     """
     warnings.simplefilter("ignore")
     import nacl.utils
@@ -83,16 +83,18 @@ def unhide(unhide_file, decompress=False):
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(
         description=__doc__,
-        formatter_class=argparse.RawDescriptionHelpFormatter,
-        argument_default=argparse.SUPPRESS
+        formatter_class=argparse.RawDescriptionHelpFormatter
         )
-    parser.add_argument('-i', '--image_file', default=None,
+    hide = parser.add_argument_group('Hide', hide.__doc__)
+    hide.add_argument('-i', '--image_file', default=None,
         help="Image to hide archive in")
-    parser.add_argument('-a', '--archive_file', default=None,
+    hide.add_argument('-a', '--archive_file', default=None,
         help="Archive to be hidden")
-    parser.add_argument('-u', '--unhide', default=None,
-        help="Image with hidden archive to be extracted")
-    parser.add_argument('-d', '--decompress', default=False)
+    unhide = parser.add_argument_group('Unhide', unhide.__doc__)
+    unhide.add_argument('-u', '--unhide', default=None,
+        help="Filename of image with hidden archive to be extracted")
+    unhide.add_argument('-d', '--decompress', default=False, action="store_true",
+        help="Decompress file to same location as image")
     args = parser.parse_args()
     if args.image_file and args.archive_file:
         hide(args.image_file,args.archive_file)
