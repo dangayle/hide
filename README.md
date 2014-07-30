@@ -18,7 +18,7 @@ To unhide and decrypt a zipfile:
 ```
 python hide.py -u batman.gif -d
 ```
-Optional `-d` flag uncompresses the archive to same dir as the image file.
+Optional `-d` flag decompresses the archive to same dir as the image file.
 
 ###Caveats
 I didn't attempt to invent my own cryptography, so Hide is built using the excellent and cryptographically sound [bcrypt](https://github.com/pyca/bcrypt/) and [PyNaCl](https://github.com/pyca/pynacl) libraries. Don't roll your own crypto.
