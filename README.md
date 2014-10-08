@@ -23,7 +23,7 @@ Optional `-d` flag decompresses the archive to same dir as the image file.
 ###Caveats
 I didn't attempt to invent my own cryptography, so Hide is built using the excellent and cryptographically sound [bcrypt](https://github.com/pyca/bcrypt/) and [PyNaCl](https://github.com/pyca/pynacl) libraries. Don't roll your own crypto.
 
-The actual [steganography](http://en.wikipedia.org/wiki/Steganography) part of this script is painfully awkward, not like the "least significant bit" kinds of steganography. Although the crypto is secure, the hidden archive file is easily detectable by someone with decent CS knowledge, meaning although they can't open the file, they might know it exists.
+The actual [steganography](http://en.wikipedia.org/wiki/Steganography) part of this script is rudimentary, so although the crypto is secure, the hidden archive file is easily detectable by someone with decent CS knowledge. That means they can't open the file, but they might know it exists.
 
 
 ###Tests
@@ -40,3 +40,4 @@ Uses the [MIT license](https://github.com/dangayle/hide/blob/master/LICENSE)
 * Maybe add the zip compression directly into the script?
 * Make the filepaths more flexible
 * Make a copy of the original image rather than editing in place?
+* Add it to PyPI
